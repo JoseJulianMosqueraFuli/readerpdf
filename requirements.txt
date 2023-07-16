@@ -1,2 +1,2 @@
 gTTS
-PyPDF2
+PyPDF4
