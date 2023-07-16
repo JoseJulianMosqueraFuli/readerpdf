@@ -1,23 +1,31 @@
-import PyPDF2
+import PyPDF4
 from gtts import gTTS
 import os
 
 
 def read_pdf(filename):
     with open(filename, "rb") as file:
-        reader = PyPDF2.PdfReader(file)
+        reader = PyPDF4.PdfReader(file)
         num_pages = len(reader.pages)
 
         pages = []
         for page in range(num_pages):
             current_page = reader.pages[page]
             text = current_page.extract_text()
-            pages.append(text)
+            words = current_page.extract_words()
+            pages.append(text, words)
 
         return pages
 
 
-def text_to_speech(text, filename):
+def text_to_speech(text, filename, words_to_highlight):
+    highlight_text = ""
+    for word in text.split():
+        if word in words_to_highlight:
+            highlight_text += f"<span style='background-color: yellow'>{word}</span>"
+        else:
+            highlighted_text += f"{word} "
+
     tts = gTTS(text, lang="es", slow=False)
     tts.save(filename)
 
@@ -25,6 +33,7 @@ def text_to_speech(text, filename):
 def main():
     filename = "test.pdf"  # Replace with your PDF file
     output_folder = "output"  # Output folder for generated audio files
+    words_to_highlight = ["highlight", "text"]
 
     # Create output folder if it doesn't exist
     if not os.path.exists(output_folder):
