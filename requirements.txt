@@ -1,2 +1,5 @@
 gTTS
-PyPDF4
+PyPDF2
+beautifulsoup4
+PyQt5
+nltk
